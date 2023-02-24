@@ -99,7 +99,7 @@ services:
     labels:
       org.label-schema.group: "monitoring"
     volumes:
-      - ./loki:/mnt/config
+      - ./loki:/mnt/config:ro
 
   promtail:
     image: grafana/promtail:2.7.2
@@ -111,18 +111,18 @@ services:
     labels:
       org.label-schema.group: "monitoring"
     volumes:
-      - ./promtail:/mnt/config
-      - /var/log:/var/log
-      - /var/lib/docker/containers:/var/lib/docker/containers
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./promtail:/mnt/config:ro
+      # - /var/log:/var/log:ro
+      # - /var/lib/docker/containers:/var/lib/docker/containers
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
   grafana:
     image: grafana/grafana:9.3.2
     container_name: grafana
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
     environment:
       - GF_SECURITY_ADMIN_USER=${ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
