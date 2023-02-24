@@ -87,6 +87,33 @@ services:
     labels:
       org.label-schema.group: "monitoring"
 
+  loki:
+    image: grafana/loki:2.7.2
+    container_name: loki
+    command: -config.file=/mnt/config/loki-config.yaml
+    restart: unless-stopped
+    expose:
+      - 3100
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+    volumes:
+      - ./loki:/mnt/config
+
+  promtail:
+    image: grafana/promtail:2.7.2
+    container_name: promtail
+    command: -config.file=/mnt/config/promtail-config.yaml
+    restart: unless-stopped
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+    volumes:
+      - ./promtail:/mnt/config
+      - /var/log:/var/log
+
   grafana:
     image: grafana/grafana:9.3.2
     container_name: grafana
