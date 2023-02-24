@@ -88,7 +88,7 @@ services:
       org.label-schema.group: "monitoring"
 
   loki:
-    image: grafana/loki:2.7.2
+    image: grafana/loki:2.7.3
     container_name: loki
     command: -config.file=/mnt/config/loki-config.yaml
     restart: unless-stopped
@@ -114,6 +114,7 @@ services:
       - ./promtail:/mnt/config
       - /var/log:/var/log
       - /var/lib/docker/containers:/var/lib/docker/containers
+      - /var/run/docker.sock:/var/run/docker.sock
 
   grafana:
     image: grafana/grafana:9.3.2
